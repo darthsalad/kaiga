@@ -1,0 +1,19 @@
+name: Feature request
+description: Suggest something Kaiga could do
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What you're trying to do
+      description: The situation, not the solution. "I read manga on a tablet and..." helps more than "add X".
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would help
+  - type: textarea
+    id: elsewhere
+    attributes:
+      label: Other apps that do this well

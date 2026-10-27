@@ -1,131 +1,94 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, { useEffect, useState } from 'react';
+import { AppState, StatusBar, View } from 'react-native';
+import { DarkTheme, DefaultTheme, NavigationContainer, type Theme as NavTheme } from '@react-navigation/native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ErrorBoundary } from './src/components/ErrorBoundary';
+import { SheetHost } from './src/components/Sheet';
+import { SnackbarHost } from './src/components/Snackbar';
+import { Text } from './src/components/Text';
+import { migrate } from './src/db/database';
+import { Kaiga, errorMessage } from './src/native/kaiga';
+import { RootNavigator } from './src/navigation/RootNavigator';
+import { scanAllRoots } from './src/services/folders';
+import { resumeInterruptedImports, runCleanup } from './src/services/library';
+import { ThemeProvider, useTheme } from './src/theme/ThemeProvider';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+function Shell() {
+	const theme = useTheme();
+	const [ready, setReady] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+	useEffect(() => {
+		migrate()
+			.then(() => {
+				setReady(true);
+				resumeInterruptedImports().then(() => scanAllRoots().catch(() => undefined));
+				runCleanup();
+			})
+			.catch(err => setError(errorMessage(err)));
+	}, []);
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+	useEffect(() => {
+		if (ready || error) {
+			// the launch screen stays up until the first real screen has been drawn
+			requestAnimationFrame(() => Kaiga.hideSplash());
+		}
+	}, [ready, error]);
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
+	useEffect(() => {
+		const sub = AppState.addEventListener('change', state => {
+			if (state === 'active' && ready) {
+				runCleanup();
+			}
+		});
+		return () => sub.remove();
+	}, [ready]);
+
+	const navTheme: NavTheme = {
+		...(theme.dark ? DarkTheme : DefaultTheme),
+		colors: {
+			...(theme.dark ? DarkTheme : DefaultTheme).colors,
+			background: theme.background,
+			card: theme.surface,
+			text: theme.text,
+			primary: theme.accent.primary,
+			border: theme.outlineVariant,
+		},
+	};
+
+	return (
+		<View style={{ flex: 1, backgroundColor: theme.background }}>
+			<StatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} />
+			{error ? (
+				<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+					<Text variant="title">Kaiga could not open its library</Text>
+					<Text variant="caption" muted>
+						{error}
+					</Text>
+				</View>
+			) : ready ? (
+				<ErrorBoundary>
+					<NavigationContainer theme={navTheme}>
+						<SheetHost>
+							<RootNavigator />
+						</SheetHost>
+						<SnackbarHost />
+					</NavigationContainer>
+				</ErrorBoundary>
+			) : null}
+		</View>
+	);
 }
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  /*
-   * To keep the template simple and small we're adding padding to prevent view
-   * from rendering under the System UI.
-   * For bigger apps the reccomendation is to use `react-native-safe-area-context`:
-   * https://github.com/AppAndFlow/react-native-safe-area-context
-   *
-   * You can read more about it here:
-   * https://github.com/react-native-community/discussions-and-proposals/discussions/827
-   */
-  const safePadding = '5%';
-
-  return (
-    <View style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        style={backgroundStyle}>
-        <View style={{paddingRight: safePadding}}>
-          <Header/>
-        </View>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            paddingHorizontal: safePadding,
-            paddingBottom: safePadding,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </View>
-  );
+export default function App() {
+	return (
+		<GestureHandlerRootView style={{ flex: 1 }}>
+			<SafeAreaProvider>
+				<ThemeProvider>
+					<Shell />
+				</ThemeProvider>
+			</SafeAreaProvider>
+		</GestureHandlerRootView>
+	);
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
-export default App;

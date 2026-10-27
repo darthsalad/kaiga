@@ -1,0 +1,2 @@
+bun run tsc
+echo "executed pre push hook"

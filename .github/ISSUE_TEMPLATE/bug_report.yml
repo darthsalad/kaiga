@@ -1,0 +1,53 @@
+name: Bug report
+description: Something in Kaiga doesn't work as it should
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you saw, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Add a CBR from Google Drive
+        2. Open it and rotate page 3
+        3. ...
+    validations:
+      required: true
+  - type: dropdown
+    id: format
+    attributes:
+      label: File format
+      multiple: true
+      options: [CBZ / ZIP, CBR / RAR, CB7 / 7z, Not about a specific file]
+  - type: dropdown
+    id: source
+    attributes:
+      label: Where the comic comes from
+      multiple: true
+      options: [Phone storage, Watched library folder, Google Drive, Another cloud app, Not about a specific file]
+  - type: input
+    id: version
+    attributes:
+      label: Kaiga version
+      description: Settings › About Kaiga
+      placeholder: 0.1.0
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Phone and Android version
+      placeholder: Pixel 9, Android 16
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots, screen recordings or error text
+      description: If Kaiga showed "Something went wrong", paste the text from that screen.

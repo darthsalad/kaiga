@@ -19,9 +19,9 @@ react {
 
     /* Variants */
     //   The list of variants to that are debuggable. For those we're going to
-    //   skip the bundling of the JS bundle and the assets. By default is just 'debug'.
+    //   skip the bundling of the JS bundle and the assets. Default is "debug", "debugOptimized".
     //   If you add flavors like lite, prod, etc. you'll have to list your debuggableVariants.
-    // debuggableVariants = ["liteDebug", "prodDebug"]
+    // debuggableVariants = ["liteDebug", "liteDebugOptimized", "prodDebug", "prodDebugOptimized"]
 
     /* Bundling */
     //   A list containing the node command and its flags. Default is just 'node'.
@@ -57,7 +57,21 @@ react {
 /**
  * Set this to true to Run Proguard on Release builds to minify the Java bytecode.
  */
-def enableProguardInReleaseBuilds = false
+def enableProguardInReleaseBuilds = true
+
+/** package.json is the one place the version is set; versionCode must go up with every release. */
+def appPackage = new groovy.json.JsonSlurper().parse(file("../../package.json"))
+
+/**
+ * Release signing comes from Gradle properties, so the key never lives in the repo. Set them in
+ * ~/.gradle/gradle.properties, or as ORG_GRADLE_PROJECT_<name> environment variables in CI:
+ *   KAIGA_RELEASE_STORE_FILE, KAIGA_RELEASE_STORE_PASSWORD, KAIGA_RELEASE_KEY_ALIAS, KAIGA_RELEASE_KEY_PASSWORD
+ * Without them, release builds fall back to the debug key: fine for testing, not for sharing.
+ */
+def releaseSigning = project.hasProperty("KAIGA_RELEASE_STORE_FILE")
+
+/** APKs per ABI follow -PreactNativeArchitectures, so a one-ABI build doesn't produce empty ones. */
+def abis = (project.findProperty("reactNativeArchitectures") ?: "armeabi-v7a,arm64-v8a,x86,x86_64").split(",")*.trim()
 
 /**
  * The preferred build flavor of JavaScriptCore (JSC)
@@ -77,14 +91,29 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.kaiga"
+    namespace "com.darthsalad.kaiga"
     defaultConfig {
-        applicationId "com.kaiga"
+        applicationId "com.darthsalad.kaiga"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName appPackage.version
     }
+
+    sourceSets {
+        // bundled fonts live in the repo root so they are tracked outside the ignored res/assets folders
+        main { assets.srcDirs += ["../../assets"] }
+    }
+    splits {
+        abi {
+            enable true
+            reset()
+            include(*abis)
+            // one APK with every ABI, for anyone unsure which phone they have
+            universalApk true
+        }
+    }
+
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
@@ -92,17 +121,23 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        if (releaseSigning) {
+            release {
+                storeFile file(KAIGA_RELEASE_STORE_FILE)
+                storePassword KAIGA_RELEASE_STORE_PASSWORD
+                keyAlias KAIGA_RELEASE_KEY_ALIAS
+                keyPassword KAIGA_RELEASE_KEY_PASSWORD
+            }
+        }
     }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
         }
         release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig releaseSigning ? signingConfigs.release : signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
 }
@@ -110,6 +145,9 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
+    implementation("com.github.omicronapps:7-Zip-JBinding-4Android:Release-16.02-2.03")
+    implementation("androidx.palette:palette-ktx:1.0.0")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

@@ -1,0 +1,4 @@
+bun run format --log-level silent
+bun run lint --quiet
+
+echo "executed pre commit hook"

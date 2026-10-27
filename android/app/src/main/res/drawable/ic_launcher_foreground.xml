@@ -1,0 +1,28 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Panels: a K made of three comic panels; source in docs/branding/icon.svg -->
+    <group
+        android:pivotX="54"
+        android:pivotY="54"
+        android:scaleX="0.72"
+        android:scaleY="0.72">
+        <path
+            android:fillColor="#F2EDE4"
+            android:pathData="M32.5,27H42.5A3.5,3.5 0,0 1,46 30.5V77.5A3.5,3.5 0,0 1,42.5 81H32.5A3.5,3.5 0,0 1,29 77.5V30.5A3.5,3.5 0,0 1,32.5 27Z" />
+        <path
+            android:fillColor="#F4BD3C"
+            android:pathData="M50,27H81L63,51.5H50Z"
+            android:strokeColor="#F4BD3C"
+            android:strokeLineJoin="round"
+            android:strokeWidth="3" />
+        <path
+            android:fillColor="#F2EDE4"
+            android:pathData="M50,56.5H63L81,81H50Z"
+            android:strokeColor="#F2EDE4"
+            android:strokeLineJoin="round"
+            android:strokeWidth="3" />
+    </group>
+</vector>
