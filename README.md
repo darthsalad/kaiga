@@ -73,9 +73,10 @@ After changing dependencies, regenerate the licenses shown in the app with `bun 
 ## Releasing
 
 1. Set the new version in `package.json` (Android's `versionName` is read from it) and raise `versionCode` in `android/app/build.gradle`.
-2. Move the changes under a new heading in `CHANGELOG.md`.
-3. Commit, then tag and push: `git tag v0.1.0 && git push origin v0.1.0`.
-4. The Release workflow builds signed APKs, checksums them and opens a draft release with the changelog section as notes. Check it and publish.
+2. Move the changes under a new dated heading in `CHANGELOG.md` (`## [X.Y.Z] - YYYY-MM-DD`); the workflow uses that section as the release notes.
+3. After changing dependencies, run `bun install` and commit `bun.lock` too: CI installs with `--frozen-lockfile` and fails on a stale lockfile.
+4. Commit, then tag and push: `git tag -a vX.Y.Z -m "Kaiga X.Y.Z" && git push origin main vX.Y.Z`. The tag must match the version in `package.json`.
+5. The Release workflow builds signed APKs, checksums them and opens a draft release with the changelog section as notes. Check it and publish.
 
 The workflow needs the signing key as repository secrets; see the comment at the top of `.github/workflows/release.yml`.
 

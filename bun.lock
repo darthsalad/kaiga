@@ -27,8 +27,6 @@
         "@babel/core": "^7.25.2",
         "@babel/preset-env": "^7.25.3",
         "@babel/runtime": "^7.25.0",
-        "@expo-google-fonts/bricolage-grotesque": "^0.4.1",
-        "@expo-google-fonts/plus-jakarta-sans": "^0.4.2",
         "@react-native-community/cli": "20.2.0",
         "@react-native-community/cli-platform-android": "20.2.0",
         "@react-native-community/cli-platform-ios": "20.2.0",
@@ -297,10 +295,6 @@
     "@eslint/eslintrc": ["@eslint/eslintrc@2.1.4", "", { "dependencies": { "ajv": "^6.12.4", "debug": "^4.3.2", "espree": "^9.6.0", "globals": "^13.19.0", "ignore": "^5.2.0", "import-fresh": "^3.2.1", "js-yaml": "^4.1.0", "minimatch": "^3.1.2", "strip-json-comments": "^3.1.1" } }, "sha512-269Z39MS6wVJtsoUl10L60WdkhJVdPG24Q4eZTH3nnF6lpvSShEK3wQjDX9JRWAUPvPh7COouPpU9IrqaZFvtQ=="],
 
     "@eslint/js": ["@eslint/js@8.57.1", "", {}, "sha512-d9zaMRSTIKDLhctzH12MtXvJKSSUhaHcjV+2Z+GK+EEY7XKpP5yR4x+N3TAcHTcu963nIr+TMcCb4DBCYX1z6Q=="],
-
-    "@expo-google-fonts/bricolage-grotesque": ["@expo-google-fonts/bricolage-grotesque@0.4.1", "", {}, "sha512-uijLLg+thOrFgw+gXtYA3dQJTBqqqleabcNFpamaYXqUUcbFe0J18C+4nfL0CyGzSJUicxUBLY4Zv7jdHmTGMA=="],
-
-    "@expo-google-fonts/plus-jakarta-sans": ["@expo-google-fonts/plus-jakarta-sans@0.4.2", "", {}, "sha512-6LYVmVGwjQvH+uzzWlVc9+oMj4lkNQ41aymVDjO+x8aFk8kCye20wOyLomYMZaMezA++Uf1mZRCw3W3Fy/hxEA=="],
 
     "@hapi/hoek": ["@hapi/hoek@9.3.0", "", {}, "sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ=="],
 

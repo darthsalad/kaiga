@@ -2,7 +2,7 @@
 
 All notable changes to Kaiga are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [Semantic Versioning](https://semver.org/).
 
-## [0.1.0] - Unreleased
+## [0.1.0] - 2026-10-27
 
 First release of the rewrite.
 
@@ -27,3 +27,5 @@ First release of the rewrite.
 - About screen with the version, source link, Kaiga's license and the licenses of everything bundled.
 - A recovery screen instead of a crash when something goes wrong.
 - Per-ABI release APKs (plus a universal one), shrunk with R8.
+
+[0.1.0]: https://github.com/darthsalad/kaiga/releases/tag/v0.1.0

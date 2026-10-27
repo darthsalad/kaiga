@@ -1,12 +1,5 @@
 # TODO
 
-## Before the first GitHub release
-
-- [ ] Create the release keystore and back it up; add it to `~/.gradle/gradle.properties` and the repository secrets (see README › Building and `.github/workflows/release.yml`).
-- [ ] Push the repository to GitHub (`https://github.com/darthsalad/kaiga`).
-- [ ] README screenshots.
-- [ ] Tag `v0.1.0`.
-
 ## Needs testing on a device
 
 - [ ] Folders: grouping, watched folders, pull to refresh, Move to folder.
@@ -27,6 +20,7 @@
 
 ## Planned
 
+- [ ] README screenshots.
 - [ ] Cover-to-reader transition, predictive back.
 - [ ] Undo for removing a comic from the library.
 
@@ -43,6 +37,7 @@
 
 ## Done since the plan
 
+- v0.1.0: release key, repository secrets, and signed APKs built and published as a draft by the Release workflow.
 - Keep screen on while reading (Settings › Reading).
 - How many comics keep their extracted pages is configurable (Settings › Advanced, default 3).
 - The picker only offers comic archives; a picked file that fails to open shows why and is not added.

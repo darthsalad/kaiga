@@ -73,7 +73,7 @@ jobs:
           # release notes: this version's section of CHANGELOG.md
           awk -v v="${GITHUB_REF_NAME#v}" '
             $0 ~ "^## \\[" v "\\]" { on = 1; next }
-            on && /^## \[/ { exit }
+            on && /^(## \[|\[[^]]+\]: )/ { exit }
             on { print }
           ' CHANGELOG.md > notes.md
       - name: Draft the release
