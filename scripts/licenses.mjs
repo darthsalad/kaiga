@@ -1,5 +1,5 @@
 // Collects the licenses of everything that ships inside the app into
-// src/features/about/licenses.json, which the About screen shows.
+// src/features/about/license-data.json, which the About screen shows.
 //
 // JS packages: the ones Metro actually puts in the release bundle, read from its source map
 // (react-native's own dev tooling never reaches the phone, so it is not listed).
@@ -13,7 +13,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const out = join(root, 'src/features/about/licenses.json');
+const out = join(root, 'src/features/about/license-data.json');
 
 const read = path => readFileSync(path, 'utf8').replace(/\r\n/g, '\n').trim();
 const reactNativeLicense = () => read(join(root, 'node_modules/react-native/LICENSE'));

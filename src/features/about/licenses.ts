@@ -1,4 +1,4 @@
-import data from './licenses.json';
+import data from './license-data.json';
 
 export type Component = {
 	name: string;
