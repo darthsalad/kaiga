@@ -10,6 +10,22 @@ Add comics from your phone, Google Drive or any other app that shows up in the A
 
 Kaiga has no accounts, no analytics and no network access: release builds do not request the internet permission.
 
+<p align="center">
+  <img src="docs/screenshots/library.webp" width="240" alt="Library with continue reading and all comics">
+  <img src="docs/screenshots/detail.webp" width="240" alt="Comic details tinted by its cover">
+  <img src="docs/screenshots/reader.webp" width="240" alt="Reader showing half of a wide page">
+</p>
+<p align="center">
+  <img src="docs/screenshots/reader-settings.webp" width="240" alt="Reader settings for rotation, wide pages and direction">
+  <img src="docs/screenshots/folder.webp" width="240" alt="A folder of comics">
+  <img src="docs/screenshots/quick-actions.webp" width="240" alt="Long-press quick actions">
+</p>
+<p align="center">
+  <img src="docs/screenshots/reader-immersive.webp" width="240" alt="Reader with controls hidden">
+  <img src="docs/screenshots/history.webp" width="240" alt="Reading history">
+  <img src="docs/screenshots/settings.webp" width="240" alt="Settings">
+</p>
+
 ## Features
 
 - CBZ, CBR (RAR4 and RAR5, including solid archives) and CB7. The format is read from the file itself, so a `.cbr` that is really a ZIP still opens.
